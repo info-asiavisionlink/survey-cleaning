@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>清掃・品質管理アンケート（60秒）</title>
+  <meta name="description" content="協力会社・下請け清掃の品質管理に関する簡易アンケート（所要60秒）。" />
+  <style>
+    :root{
+      --bg:#0b1220;
+      --card:#0f1b33;
+      --text:#eaf1ff;
+      --muted:#a8b6d8;
+      --accent:#7dd3fc;
+      --line:rgba(255,255,255,.12);
+      --danger:#fb7185;
+      --ok:#34d399;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans JP", sans-serif;
+      background: radial-gradient(1200px 600px at 20% 0%, rgba(125,211,252,.20), transparent 55%),
+                  radial-gradient(900px 500px at 90% 10%, rgba(52,211,153,.16), transparent 50%),
+                  var(--bg);
+      color:var(--text);
+    }
+    .wrap{max-width:880px;margin:0 auto;padding:28px 16px 48px}
+    .topbar{
+      height:6px;border-radius:999px;
+      background: linear-gradient(90deg, rgba(125,211,252,.95), rgba(52,211,153,.85), rgba(251,113,133,.85));
+      margin-bottom:18px;
+    }
+    h1{margin:0 0 8px;font-size:22px;line-height:1.35}
+    .sub{margin:0 0 18px;color:var(--muted);font-size:14px;line-height:1.6}
+    .pill{
+      display:inline-flex;gap:8px;align-items:center;
+      padding:8px 12px;border:1px solid var(--line);border-radius:999px;
+      background: rgba(255,255,255,.04); color:var(--muted); font-size:12px;
+      margin:10px 0 18px;
+    }
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      border: 1px solid var(--line);
+      border-radius:16px;
+      padding:16px;
+      box-shadow: 0 18px 60px rgba(0,0,0,.35);
+    }
+    .grid{display:grid;grid-template-columns:1fr;gap:12px}
+    @media(min-width:760px){.grid{grid-template-columns:1fr 1fr}}
+    label{display:block;font-size:13px;color:var(--muted);margin:0 0 6px}
+    input, select, textarea{
+      width:100%;
+      padding:12px 12px;
+      border-radius:12px;
+      border:1px solid var(--line);
+      background: rgba(0,0,0,.18);
+      color:var(--text);
+      outline:none;
+    }
+    textarea{min-height:110px;resize:vertical}
+    input:focus, select:focus, textarea:focus{border-color: rgba(125,211,252,.6); box-shadow:0 0 0 3px rgba(125,211,252,.18)}
+    .q{
+      padding:12px;
+      border:1px solid var(--line);
+      border-radius:14px;
+      background: rgba(0,0,0,.16);
+    }
+    .qtitle{font-size:14px;margin:0 0 8px}
+    .radios{display:flex;flex-wrap:wrap;gap:10px}
+    .radio{
+      display:flex;align-items:center;gap:8px;
+      padding:10px 10px;border:1px solid var(--line);border-radius:12px;
+      background: rgba(255,255,255,.03);
+      cursor:pointer; user-select:none;
+    }
+    .radio input{width:auto;margin:0}
+    .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+    .btn{
+      appearance:none;border:0; cursor:pointer;
+      padding:12px 16px;border-radius:12px;
+      background: linear-gradient(90deg, rgba(125,211,252,.95), rgba(52,211,153,.90));
+      color:#06101f;font-weight:700;
+    }
+    .btn:disabled{opacity:.55;cursor:not-allowed}
+    .tiny{font-size:12px;color:var(--muted);line-height:1.6}
+    .status{margin-top:12px;font-size:13px}
+    .ok{color:var(--ok)}
+    .ng{color:var(--danger)}
+    .footer{margin-top:14px;border-top:1px solid var(--line);padding-top:12px}
+    .brand{font-weight:700;color:var(--text)}
+    .mono{font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="topbar"></div>
+
+    <h1>清掃・品質管理アンケート（所要60秒）</h1>
+    <p class="sub">
+      ビルメンテナンス会社・管理会社向け。協力会社（下請け）清掃の品質管理・是正対応の実態を把握するための簡易調査。
+      売り込み目的じゃなく、現場の実態データ収集が目的。
+    </p>
+
+    <div class="pill">
+      <span>管理番号（tid）:</span>
+      <span class="mono" id="tidView">-</span>
+    </div>
+
+    <div class="card">
+      <form id="surveyForm">
+        <div class="grid">
+          <div>
+            <label>会社名（任意）</label>
+            <input name="company" placeholder="例：〇〇ビルメンテナンス株式会社" />
+          </div>
+          <div>
+            <label>役職/担当領域（任意）</label>
+            <input name="role" placeholder="例：現場責任者、品質管理、管理部 など" />
+          </div>
+        </div>
+
+        <div style="height:10px"></div>
+
+        <div class="q">
+          <p class="qtitle">Q1. 協力会社（下請け）清掃の品質管理は、仕組みとして回っていますか？</p>
+          <div class="radios">
+            <label class="radio"><input type="radio" name="q1" value="十分回っている" required>十分回っている</label>
+            <label class="radio"><input type="radio" name="q1" value="概ね回っている">概ね回っている</label>
+            <label class="radio"><input type="radio" name="q1" value="時々崩れる">時々崩れる</label>
+            <label class="radio"><input type="radio" name="q1" value="回っていない">回っていない</label>
+          </div>
+        </div>
+
+        <div style="height:10px"></div>
+
+        <div class="q">
+          <p class="qtitle">Q2. 品質チェックの頻度はどれくらい？</p>
+          <select name="q2" required>
+            <option value="" disabled selected>選択</option>
+            <option>毎日</option>
+            <option>週1〜2回</option>
+            <option>月1〜2回</option>
+            <option>四半期に1回以下</option>
+            <option>定期チェックはない</option>
+          </select>
+        </div>
+
+        <div style="height:10px"></div>
+
+        <div class="q">
+          <p class="qtitle">Q3. クレーム/指摘が出たとき、是正（再発防止）まで回せていますか？</p>
+          <div class="radios">
+            <label class="radio"><input type="radio" name="q3" value="回せている" required>回せている</label>
+            <label class="radio"><input type="radio" name="q3" value="一部だけ">一部だけ</label>
+            <label class="radio"><input type="radio" name="q3" value="属人化している">属人化している</label>
+            <label class="radio"><input type="radio" name="q3" value="回せていない">回せていない</label>
+          </div>
+        </div>
+
+        <div style="height:10px"></div>
+
+        <div class="q">
+          <p class="qtitle">Q4. いちばん困っているポイントはどれ？（複数可）</p>
+          <div class="radios">
+            <label class="radio"><input type="checkbox" name="q4" value="品質のバラつき">品質のバラつき</label>
+            <label class="radio"><input type="checkbox" name="q4" value="報告が遅い/来ない">報告が遅い/来ない</label>
+            <label class="radio"><input type="checkbox" name="q4" value="写真/証跡が残らない">写真/証跡が残らない</label>
+            <label class="radio"><input type="checkbox" name="q4" value="再発防止が回らない">再発防止が回らない</label>
+            <label class="radio"><input type="checkbox" name="q4" value="現場教育が難しい">現場教育が難しい</label>
+            <label class="radio"><input type="checkbox" name="q4" value="管理工数が高い">管理工数が高い</label>
+          </div>
+          <div style="height:10px"></div>
+          <label>補足（任意）</label>
+          <textarea name="q4_note" placeholder="例：夜間帯の報告が翌日になりがち、など"></textarea>
+        </div>
+
+        <div style="height:10px"></div>
+
+        <div class="q">
+          <p class="qtitle">Q5. もし改善できるなら、何を最優先にしたい？</p>
+          <select name="q5" required>
+            <option value="" disabled selected>選択</option>
+            <option>品質の安定化</option>
+            <option>報告の標準化（写真/チェックリスト）</option>
+            <option>是正フローの整備（期限・担当・再発防止）</option>
+            <option>協力会社の教育/評価</option>
+            <option>管理工数の削減</option>
+          </select>
+        </div>
+
+        <div style="height:10px"></div>
+
+        <div class="q">
+          <p class="qtitle">連絡先（任意）</p>
+          <div class="grid">
+            <div>
+              <label>メール</label>
+              <input name="reply_email" type="email" placeholder="例：taro@example.com" />
+            </div>
+            <div>
+              <label>電話</label>
+              <input name="reply_phone" placeholder="例：03-xxxx-xxxx" />
+            </div>
+          </div>
+
+          <div style="height:10px"></div>
+          <label class="row tiny">
+            <input type="checkbox" id="consent" required style="width:auto">
+            <span>送信内容が調査目的で n8n（ナインエイトエヌ）に送信されることに同意する</span>
+          </label>
+        </div>
+
+        <div style="height:12px"></div>
+
+        <div class="row">
+          <button class="btn" id="submitBtn" type="submit">送信する</button>
+          <span class="tiny">※ 送信後、同じ内容の再送は避けろ（連打防止）</span>
+        </div>
+
+        <div class="status" id="status"></div>
+
+        <div class="footer tiny">
+          <div class="brand">NEXT ASIA LINK</div>
+          <div>担当：田中 慶樹 / info@asiavision.link</div>
+          <div>※これは調査フォーム。営業の売り込みはここではしない。</div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // ===== 設定：n8n ウェブフックURL =====
+    const WEBHOOK_URL = "https://nextasia.app.n8n.cloud/webhook/cd2736d8-52a8-4e1e-b295-de902d2fc54c";
+
+    // tid（追跡ID）をURLから拾う
+    const params = new URLSearchParams(location.search);
+    const tid = params.get("tid") || "";
+    document.getElementById("tidView").textContent = tid || "-";
+
+    // フォーム値抽出
+    function formToJson(form) {
+      const fd = new FormData(form);
+      const obj = {};
+      for (const [k, v] of fd.entries()) {
+        // checkbox複数は配列化
+        if (obj[k] !== undefined) {
+          if (!Array.isArray(obj[k])) obj[k] = [obj[k]];
+          obj[k].push(v);
+        } else {
+          obj[k] = v;
+        }
+      }
+      return obj;
+    }
+
+    const form = document.getElementById("surveyForm");
+    const statusEl = document.getElementById("status");
+    const btn = document.getElementById("submitBtn");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      btn.disabled = true;
+      statusEl.className = "status";
+      statusEl.textContent = "送信中…";
+
+      const payload = formToJson(form);
+
+      // 追跡とメタ情報を付与
+      payload.tid = tid;
+      payload.page_url = location.href;
+      payload.user_agent = navigator.userAgent;
+      payload.submitted_at = new Date().toISOString();
+
+      try {
+        const res = await fetch(WEBHOOK_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+
+        if (!res.ok) {
+          const t = await res.text().catch(() => "");
+          throw new Error("HTTP " + res.status + " " + t);
+        }
+
+        statusEl.classList.add("ok");
+        statusEl.textContent = "送信完了。協力ありがとう。";
+
+        // 送信後の再送防止：フォームロック
+        Array.from(form.elements).forEach(el => el.disabled = true);
+
+      } catch (err) {
+        statusEl.classList.add("ng");
+        statusEl.textContent = "送信失敗。時間をおいて再度。(" + (err?.message || "unknown") + ")";
+        btn.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>
